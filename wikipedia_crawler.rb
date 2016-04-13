@@ -4,7 +4,7 @@ require_relative 'wikipedia_scrapper'
 
 class WikipediaCrawler
   CACHE_FILE = 'wikipedia_cache.json'
-  CACHE_TIME_TO_SAVE = 6000 # backup every 10 minutes
+  CACHE_TIME_TO_SAVE = 600 # backup every 10 minutes
 
   class << self
     def crawl(from_path, to_path)
@@ -29,7 +29,7 @@ class WikipediaCrawler
           last_save = save_cache(cache, last_save)
         end
 
-        return current.previous_plus_current << to_path if internal_links.include?(to_path)
+        return (answer = current.previous_plus_current << to_path) if internal_links.include?(to_path)
 
         internal_links.each do |link|
           queue.push(Node.new(link, current.previous_plus_current)) unless current.previous.include?(link)
