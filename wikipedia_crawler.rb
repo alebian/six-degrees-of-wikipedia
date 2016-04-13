@@ -4,20 +4,19 @@ require_relative 'wikipedia_scrapper'
 class WikipediaCrawler
   class << self
     def crawl(from_path, to_path)
-      searched = Set.new
       queue = []
       queue.push(Node.new(from_path))
 
-      print 'Crawling'
+      print "From #{from_path} crawling to #{to_path} "
       while (current = queue.shift) != nil
         print '.'
         internal_links = WikipediaScrapper.internal_links(current.path)
-        searched.add(current.path)
 
         return current.previous_plus_current if current.path == to_path
+        return current.previous_plus_current << to_path if internal_links.include?(to_path)
 
         internal_links.each do |link|
-          queue.push(Node.new(link, current.previous_plus_current)) unless searched.include?(link)
+          queue.push(Node.new(link, current.previous_plus_current)) unless current.previous.include?(link)
         end
       end
     end

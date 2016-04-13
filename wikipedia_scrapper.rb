@@ -1,6 +1,5 @@
 require 'nokogiri'
 require 'open-uri'
-require 'byebug'
 
 class WikipediaScrapper
   BASE_URL = 'https://en.wikipedia.org'
@@ -9,7 +8,7 @@ class WikipediaScrapper
     def internal_links(wikipedia_path)
       site = Nokogiri::HTML(open("#{BASE_URL}#{wikipedia_path}").read)
       site.css('a').each_with_object([]) do |link, array|
-        array << link['href'] if internal?(link['href'])
+        array << link['href'] if internal?(link['href']) && !array.include?(link['href'])
         array
       end
     end
