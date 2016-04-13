@@ -12,6 +12,8 @@ to_path = '/wiki/Chuck_Norris'
 answer = WikipediaCrawler.crawl(from_path, to_path)
 ```
 
+![alt tag](https://raw.githubusercontent.com/alebian/six-degrees-of-wikipedia/master/result_example.png)
+
 There is no validation of the given paths. Also the base URL is set to 'https://en.wikipedia.org'. The result is an array of the paths (in order) that it took to get to the destination including the first and the destination.
 
 ## Contributing
