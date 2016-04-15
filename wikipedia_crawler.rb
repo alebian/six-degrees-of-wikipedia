@@ -1,8 +1,10 @@
 require 'set'
 require 'json'
-require_relative 'wikipedia_scrapper'
+require 'nokogiri'
+require 'open-uri'
 
 class WikipediaCrawler
+  BASE_URL = 'https://en.wikipedia.org'
   CACHE_FILE = 'wikipedia_cache.json'
   CACHE_TIME_TO_SAVE = 600 # backup every 10 minutes
 
@@ -25,7 +27,7 @@ class WikipediaCrawler
           internal_links = cache[current.path]
         else
           print '.'
-          cache[current.path] = internal_links = WikipediaScrapper.internal_links(current.path)
+          cache[current.path] = internal_links = internal_links(current.path)
           last_save = save_cache(cache, last_save)
         end
 
@@ -38,6 +40,14 @@ class WikipediaCrawler
     ensure
       save_cache(cache)
       return answer
+    end
+
+    def internal_links(wikipedia_path)
+      site = Nokogiri::HTML(open("#{BASE_URL}#{wikipedia_path}").read)
+      site.css('a').each_with_object([]) do |link, array|
+        array << link['href'] if internal?(link['href']) && !array.include?(link['href'])
+        array
+      end
     end
 
     private
@@ -55,6 +65,10 @@ class WikipediaCrawler
     def load_cache
       return {} unless File.exist?(CACHE_FILE)
       JSON.parse(File.read(CACHE_FILE))
+    end
+
+    def internal?(link)
+      link =~ /^\/wiki\/*/ && !link.include?(':') && link != '/wiki/Main_Page'
     end
 
     class Node
