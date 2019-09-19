@@ -1,6 +1,6 @@
 require_relative 'wikipedia_crawler'
 
-from_path = '/wiki/Ruby_(programming_language)'
+from_path = '/wiki/Arnold_Schwarzenegger'
 to_path = '/wiki/Chuck_Norris'
 
 answer = SixDegreesOfWikipedia.call(from_path, to_path)
