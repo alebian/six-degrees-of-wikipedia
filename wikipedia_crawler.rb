@@ -1,15 +1,13 @@
 require 'set'
 require 'json'
-require 'nokogiri'
-require 'open-uri'
+require_relative 'wikipedia'
 
-class WikipediaCrawler
-  BASE_URL = 'https://en.wikipedia.org'
-  CACHE_FILE = 'wikipedia_cache.json'
+class SixDegreesOfWikipedia
+  CACHE_FILE = 'wikipedia_cache.json'.freeze
   CACHE_TIME_TO_SAVE = 600 # backup every 10 minutes
 
   class << self
-    def crawl(from_path, to_path)
+    def call(from_path, to_path)
       queue = []
       queue.push(Node.new(from_path))
 
@@ -27,7 +25,7 @@ class WikipediaCrawler
           internal_links = cache[current.path]
         else
           print '.'
-          cache[current.path] = internal_links = internal_links(current.path)
+          cache[current.path] = internal_links = Wikipedia.article_links(current.path)
           last_save = save_cache(cache, last_save)
         end
 
@@ -42,18 +40,11 @@ class WikipediaCrawler
       return answer
     end
 
-    def internal_links(wikipedia_path)
-      site = Nokogiri::HTML(open("#{BASE_URL}#{wikipedia_path}").read)
-      site.css('a').each_with_object([]) do |link, array|
-        array << link['href'] if internal?(link['href']) && !array.include?(link['href'])
-        array
-      end
-    end
-
     private
 
     def save_cache(cache, last_save = nil)
       return last_save if !last_save.nil? && (last_save + CACHE_TIME_TO_SAVE) > Time.now
+
       print 'S'
       File.delete(CACHE_FILE) if File.exist?(CACHE_FILE)
       file = File.open(CACHE_FILE, 'w+')
@@ -64,11 +55,8 @@ class WikipediaCrawler
 
     def load_cache
       return {} unless File.exist?(CACHE_FILE)
-      JSON.parse(File.read(CACHE_FILE))
-    end
 
-    def internal?(link)
-      link =~ /^\/wiki\/*/ && !link.include?(':') && link != '/wiki/Main_Page'
+      JSON.parse(File.read(CACHE_FILE))
     end
 
     class Node
