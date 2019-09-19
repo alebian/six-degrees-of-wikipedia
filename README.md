@@ -1,6 +1,7 @@
 # Six degrees of Wikipedia
 
 ## Usage
+
 Download the files and then you can do something like:
 
 ```ruby
