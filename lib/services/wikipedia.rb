@@ -6,8 +6,8 @@ module Services
     BASE_URL = 'https://en.wikipedia.org'.freeze
 
     class << self
-      def article_links(wikipedia_path)
-        article = get_article(wikipedia_path)
+      def article_links(article)
+        article = get_article(article)
 
         article.css('a').each_with_object([]) do |link, array|
           href = link['href']
@@ -18,8 +18,10 @@ module Services
 
       private
 
-      def get_article(path)
-        Nokogiri::HTML(open("#{BASE_URL}#{path}").read)
+      def get_article(article)
+        article = article.gsub('/wiki/', '')
+        uri = URI.parse("#{BASE_URL}/wiki/#{article}")
+        Nokogiri::HTML(uri.read)
       end
 
       def internal?(link)

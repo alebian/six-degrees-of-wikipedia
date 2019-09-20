@@ -1,19 +1,23 @@
-require 'set'
 require_relative 'lib/repositories/in_memory'
 require_relative 'lib/repositories/redis'
 
 class SixDegreesOfWikipedia
+  REPOSITORIES = {
+    redis: Repositories::Redis,
+    in_memory: Repositories::InMemory
+  }.freeze
+
   class << self
-    def call(from_path, to_path)
-      queue = []
+    def call(from_path, to_path, repository: nil)
+      queue = Queue.new
       queue.push(Node.new(from_path))
 
-      repository = Repositories::Redis.new
+      repository = REPOSITORIES.fetch(repository || :redis).new
 
       answer = []
 
       print "From #{from_path} to #{to_path} "
-      while (current = queue.shift) != nil
+      while (current = queue.pop) != nil
         return current.previous_plus_current if current.path == to_path
 
         links = repository.get_links(current.path)
