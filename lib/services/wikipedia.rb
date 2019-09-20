@@ -19,8 +19,8 @@ module Services
       private
 
       def get_article(article)
-        article = article.gsub('/wiki/', '')
-        uri = URI.parse("#{BASE_URL}/wiki/#{article}")
+        article = article
+        uri = URI.parse("#{BASE_URL}#{article}")
         Nokogiri::HTML(uri.read)
       end
 

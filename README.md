@@ -5,12 +5,14 @@
 Download the files and then you can do something like:
 
 ```ruby
-require_relative 'wikipedia_crawler'
+require_relative 'lib/crawlers/graph'
+require_relative 'lib/repositories/redis'
 
-from_path = '/wiki/Ruby_(programming_language)'
-to_path = '/wiki/Chuck_Norris'
+repository = Repositories::Redis.new
+from_path = 'Chuck_Norris'
+to_path = 'Jimmy_Fallon'
 
-answer = WikipediaCrawler.crawl(from_path, to_path)
+answer = Crawlers::Graph.new(from_path, to_path, repository: repository).call
 ```
 
 ![alt tag](https://raw.githubusercontent.com/alebian/six-degrees-of-wikipedia/master/result_example.png)
