@@ -1,7 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    benchmark-ips (2.7.2)
     lazy_priority_queue (0.1.1)
+    memory_profiler (0.9.14)
     mini_portile2 (2.4.0)
     nokogiri (1.10.4)
       mini_portile2 (~> 2.4.0)
@@ -15,6 +17,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  benchmark-ips (~> 2.7)
+  memory_profiler (~> 0.9)
   nokogiri (~> 1.10)
   redis (~> 4.1)
   rgl (~> 0.5)

@@ -11,20 +11,20 @@ module Crawlers
       queue = []
       queue.push(@from_path)
 
-      print 'Started searching.'
+      # print 'Started searching.'
       while (current = queue.shift) != nil
         links = @repository.get_links(current)
 
         links.each do |link|
           unless graph.has_vertex?(link)
-            print '.'
+            # print '.'
             graph.add_edge(current, link)
             queue.push(link)
           end
         end
 
         if links.include?(@to_path)
-          puts 'Found'
+          # puts 'Found'
           return graph.dijkstra_shortest_path(EdgeWeightHack.new, @from_path, @to_path)
         end
       end

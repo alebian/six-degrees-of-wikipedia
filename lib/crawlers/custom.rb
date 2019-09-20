@@ -8,20 +8,20 @@ module Crawlers
 
       answer = []
 
-      print 'Started searching.'
+      # print 'Started searching.'
       while (current = queue.pop) != nil
         return current.previous_plus_current if current.path == @to_path
 
         links = @repository.get_links(current.path)
 
         if links.include?(@to_path)
-          puts 'Found'
+          # puts 'Found'
           return (answer = current.previous_plus_current << @to_path)
         end
 
         links.each do |link|
           unless current.previous.include?(link)
-            print '.'
+            # print '.'
             queue.push(Node.new(link, current.previous_plus_current))
           end
         end
