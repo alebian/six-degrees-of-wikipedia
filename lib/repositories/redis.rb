@@ -1,5 +1,6 @@
 require 'redis'
-require 'json'
+require 'oj'
+require 'active_support/all'
 require_relative '../services/wikipedia'
 
 module Repositories
@@ -11,10 +12,10 @@ module Repositories
     end
 
     def get_links(path)
-      return JSON.parse(@connection.get(path)) if @connection.exists(path)
+      return Oj.load(@connection.get(path)) if @connection.exists(path)
 
       links = Services::Wikipedia.article_links(path)
-      @connection.set(path, links.to_s)
+      @connection.set(path, links.to_json)
 
       links
     end

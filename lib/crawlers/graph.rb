@@ -15,11 +15,11 @@ module Crawlers
       while (current = queue.shift) != nil
         links = @repository.get_links(current)
 
-        links.each do |link|
-          unless graph.has_vertex?(link)
+        links.each do |article|
+          unless graph.has_vertex?(article)
             # print '.'
-            graph.add_edge(current, link)
-            queue.push(link)
+            graph.add_edge(current, article)
+            queue.push(article)
           end
         end
 

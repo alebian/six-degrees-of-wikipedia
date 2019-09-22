@@ -3,26 +3,27 @@ require_relative 'base'
 module Crawlers
   class Custom < Base
     def call
-      queue = Queue.new
+      queue = []
       queue.push(Node.new(@from_path))
 
       answer = []
 
       # print 'Started searching.'
-      while (current = queue.pop) != nil
-        return current.previous_plus_current if current.path == @to_path
+      while (current = queue.shift) != nil
+        return current.complete_articles_path if current.article == @to_path
 
-        links = @repository.get_links(current.path)
+        links = @repository.get_links(current.article)
 
         if links.include?(@to_path)
           # puts 'Found'
-          return (answer = current.previous_plus_current << @to_path)
+          return (answer = current.complete_articles_path << @to_path)
         end
 
-        links.each do |link|
-          unless current.previous.include?(link)
+        links.each do |article|
+          # TODO: this search might be improved by using a hash
+          unless current.previous_articles.include?(article)
             # print '.'
-            queue.push(Node.new(link, current.previous_plus_current))
+            queue.push(Node.new(article, current.complete_articles_path))
           end
         end
       end
@@ -31,18 +32,15 @@ module Crawlers
     end
 
     class Node
-      attr_reader :path, :previous, :previous_intents
+      attr_reader :article, :previous_articles
 
-      def initialize(path, previous = [])
-        @path = path
-        @previous = previous
-        @previous_intents = previous.size
+      def initialize(article, previous_articles = [])
+        @article = article
+        @previous_articles = previous_articles
       end
 
-      def previous_plus_current
-        new_array = []
-        new_array.concat(@previous)
-        new_array << @path
+      def complete_articles_path
+        @previous_articles + [@article]
       end
     end
   end
