@@ -17,7 +17,7 @@ GEM
     nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
     oj (3.10.6)
-    redis (4.1.4)
+    redis (4.2.0)
     rgl (0.5.6)
       lazy_priority_queue (~> 0.1.0)
       stream (~> 0.5.2)
@@ -35,7 +35,7 @@ DEPENDENCIES
   memory_profiler (~> 0.9)
   nokogiri (~> 1.10)
   oj (~> 3.10)
-  redis (~> 4.1)
+  redis (~> 4.2)
   rgl (~> 0.5)
 
 BUNDLED WITH
