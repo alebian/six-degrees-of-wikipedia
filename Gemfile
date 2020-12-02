@@ -7,5 +7,5 @@ gem 'redis', '~> 4.2'
 gem 'rgl', '~> 0.5'
 
 group :development, :test do
-  gem 'memory_profiler', '~> 0.9'
+  gem 'memory_profiler', '~> 1.0'
 end
