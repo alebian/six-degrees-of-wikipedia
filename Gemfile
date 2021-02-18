@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'activesupport', '~> 6.0'
+gem 'activesupport', '~> 6.1'
 gem 'nokogiri', '~> 1.10'
 gem 'oj', '~> 3.10'
 gem 'redis', '~> 4.2'
